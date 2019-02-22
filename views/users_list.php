@@ -34,7 +34,11 @@ $users = isset($_SESSION['users']) ? $_SESSION['users'] : [];
                 <th>id</th>
                 <th>login</th>
                 <th>password</th>
-
+                <th>handle</th>
+                <th>created</th>
+                <th>modified</th>
+                <td><button>update</button></td>
+                <td><button>delete</button></td>
             </tr>
             </thead>
             <tbody>
@@ -45,6 +49,11 @@ $users = isset($_SESSION['users']) ? $_SESSION['users'] : [];
                     <td><?= $user->id ?></td>
                     <td><?= $user->login ?></td>
                     <td><?= $user->password ?></td>
+                    <td><?= $user->handle ?></td>
+                    <td><?= $user->created ?></td>
+                    <td><?= $user->modified ?></td>
+                    <td><button>update</button></td>
+                    <td><button>delete</button></td>
                 </tr>
                 <?php
             }

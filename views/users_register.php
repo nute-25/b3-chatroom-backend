@@ -42,10 +42,9 @@ $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
                 <input type="text" id="userLogin" name="login" value="<?php echo !empty($_POST['login']) ? ($_POST['login']) : '' ?>">
                 <label for="userPassword">password</label>
                 <input type="password" id="userPassword" name="password" value="">
-                <label for="userFirstname">firstname</label>
-                <input type="text" id="userFirstname" name="firstname" value="<?php echo !empty($_POST['firstname']) ? ($_POST['firstname']) : '' ?>">
-                <label for="userLastname">lastname</label>
-                <input type="text" id="userLastname" name="lastname" value="<?php echo !empty($_POST['lastname']) ? ($_POST['lastname']) : '' ?>">
+                <label for="userHandle">handle</label>
+                <input type="text" id="userHandle" name="handle" value="<?php echo !empty($_POST['handle']) ? ($_POST['handle']) : '' ?>">
+                <!--TODO : created and modified-->
             </fieldset>
             <input type="submit" value="Envoyer" class="button-primary">
         </form>

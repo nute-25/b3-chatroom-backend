@@ -8,6 +8,7 @@ Class User
     public $login;
     public $password;
     public $handle;
+    // TODO : created and modified
 
     public $errors = [];
 
@@ -18,6 +19,7 @@ Class User
         }
     }
 
+    // retourne users
     public function get($id = null)
     {
         if (!is_null($id)) {
@@ -35,12 +37,12 @@ Class User
             $this->id = $user->id;
             $this->login = $user->login;
             $this->password = $user->password;
-            $this->firstname = $user->firstname;
-            $this->lastname = $user->lastname;
-
+            $this->handle = $user->handle;
+            // TODO : created and modified
         }
     }
 
+    // verifie les champs saisis par l internaute
     public function validate($data)
     {
         $this->errors = [];
@@ -65,7 +67,7 @@ Class User
         if (isset($data['password'])) {
             if (empty($data['password'])) {
                 $this->errors[] = 'champ password vide';
-                // si name > 50 chars
+                // si password < 8 chars
             } else if (mb_strlen($data['password']) < 8) {
                 $this->errors[] = 'champ password trop court (8 min)';
             } else if (mb_strlen($data['password']) > 20) {
@@ -73,26 +75,18 @@ Class User
             }
         }
 
-        if (isset($data['firstname'])) {
-            if (empty($data['firstname'])) {
-                $this->errors[] = 'champ firstname vide';
-                // si name > 50 chars
-            } else if (mb_strlen($data['firstname']) < 2) {
-                $this->errors[] = 'champ firstname trop court (8 min)';
-            } else if (mb_strlen($data['firstname']) > 45) {
-                $this->errors[] = 'champ firstname trop long (20 max)';
+        if (isset($data['handle'])) {
+            if (empty($data['handle'])) {
+                $this->errors[] = 'champ handle vide';
+                // si handle < 6 chars
+            } else if (mb_strlen($data['handle']) < 6) {
+                $this->errors[] = 'champ handle trop court (6 min)';
+            } else if (mb_strlen($data['handle']) > 45) {
+                $this->errors[] = 'champ handle trop long (20 max)';
             }
         }
-        if (isset($data['lastname'])) {
-            if (empty($data['lastname'])) {
-                $this->errors[] = 'champ lastname vide';
-                // si name > 50 chars
-            } else if (mb_strlen($data['lastname']) < 2) {
-                $this->errors[] = 'champ lastname trop court (8 min)';
-            } else if (mb_strlen($data['lastname']) > 45) {
-                $this->errors[] = 'champ lastname trop long (20 max)';
-            }
-        }
+
+        // TODO : created and modified
 
         if (count($this->errors) > 0) {
             return false;
@@ -100,6 +94,7 @@ Class User
         return true;
     }
 
+    // regarde si login existe deja dans la bdd
     private function loginExists($login = null)
     {
         if (!is_null($login)) {
@@ -128,24 +123,35 @@ Class User
         return $users;
     }
 
+    // enregistrement user ou modification
     public function save($data)
     {
+        // si les champs rentrés sont valident
         if ($this->validate($data)) {
             if(isset($data['id']) && !empty($data['id'])){
+                // TODO : verifier que le login, si on choisit de le modifier n'est pas deja utilise par un autre user dans la bdd
                 // update
+                $dbh = Connection::get();
+                // TODO : requete a modifier
+                $sql = "update users set where id=:id limit 1";
+                $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $sth->execute(array(
+                    ':id' => $data['id']
+                ));
             }elseif ($this->loginExists($data['login'])){
                 return false;
             }
             $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
             /* syntaxe avec preparedStatements */
             $dbh = Connection::get();
-            $sql = "insert into users (login, password, firstname, lastname) values (:login, :password , :firstname, :lastname)";
+            // TODO : created and modified
+            $sql = "insert into users (login, password, handle) values (:login, :password , :handle)";
             $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            // TODO : created and modified
             if ($sth->execute(array(
                 ':login' => $data['login'],
                 ':password' => $hashedPassword,
-                ':firstname' => $data['firstname'],
-                ':lastname' => $data['lastname']
+                ':handle' => $data['handle']
             ))) {
                 return true;
             } else {
@@ -172,9 +178,18 @@ Class User
 
             } else {
                 // ERROR
-                $this->errors[] = 'CASSE TOI !';
+                $this->errors[] = 'connexion impossible';
             }
         }
         return false;
+    }
+
+    public function delete($data){
+        $dbh = Connection::get();
+        $sql = "delete from users where id = :id limit 1";
+        $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(
+            ':id' => $data['id']
+        ));
     }
 }

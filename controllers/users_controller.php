@@ -40,6 +40,9 @@ try {
             echo json_encode($users);
             break;
 
+        case 'delete':
+
+
         case 'register';
             if ($user->save($_POST)){
                 $_SESSION['errors'] = [];
@@ -49,6 +52,7 @@ try {
             $_SESSION['errors'] = $user->errors;
             header('Location: ../views/users_register.php');
             break;
+
         default:
             header('Location: ../views/users_login.php');
             break;
