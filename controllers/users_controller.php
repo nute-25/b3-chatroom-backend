@@ -41,8 +41,12 @@ try {
             break;
 
         case 'delete':
-
-
+            if ($user->delete($_GET)){
+                header('Location: ../views/users_login.php');
+                die;
+            }
+            header('Location: ../views/users_list.php');
+            break;
         case 'register';
             if ($user->save($_POST)){
                 $_SESSION['errors'] = [];

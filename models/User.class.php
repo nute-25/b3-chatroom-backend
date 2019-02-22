@@ -130,14 +130,19 @@ Class User
         if ($this->validate($data)) {
             if(isset($data['id']) && !empty($data['id'])){
                 // TODO : verifier que le login, si on choisit de le modifier n'est pas deja utilise par un autre user dans la bdd
-                // update
+                // TODO : select from user pour preremplir les champs dans le form dinscription
+                /*// update
                 $dbh = Connection::get();
                 // TODO : requete a modifier
-                $sql = "update users set where id=:id limit 1";
+                $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+                $sql = "update users set login=:login, password=:password, handle=:handle where id=:id limit 1";
                 $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 $sth->execute(array(
+                    ':login' => $data['login'],
+                    ':password' => $hashedPassword,
+                    ':handle' => $data['handle'],
                     ':id' => $data['id']
-                ));
+                ));*/
             }elseif ($this->loginExists($data['login'])){
                 return false;
             }
@@ -188,8 +193,13 @@ Class User
         $dbh = Connection::get();
         $sql = "delete from users where id = :id limit 1";
         $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->execute(array(
+        if($sth->execute(array(
             ':id' => $data['id']
-        ));
+        ))) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

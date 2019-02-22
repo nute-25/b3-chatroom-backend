@@ -37,8 +37,8 @@ $users = isset($_SESSION['users']) ? $_SESSION['users'] : [];
                 <th>handle</th>
                 <th>created</th>
                 <th>modified</th>
-                <td><button>update</button></td>
-                <td><button>delete</button></td>
+                <th>update</th>
+                <th>delete</th>
             </tr>
             </thead>
             <tbody>
@@ -52,8 +52,8 @@ $users = isset($_SESSION['users']) ? $_SESSION['users'] : [];
                     <td><?= $user->handle ?></td>
                     <td><?= $user->created ?></td>
                     <td><?= $user->modified ?></td>
-                    <td><button>update</button></td>
-                    <td><button>delete</button></td>
+                    <td><a href="../controllers/users_controller.php"><button>update</button></a></td>
+                    <td><a href="../controllers/users_controller.php?action=delete&id=<?php echo $user->id; ?>"><button>delete</button></a></td>
                 </tr>
                 <?php
             }
