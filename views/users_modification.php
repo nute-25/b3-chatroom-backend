@@ -7,16 +7,34 @@
  */
 session_start();
 $errors = isset($_SESSION['errors']) ? $_SESSION['errors'] : [];
-print_r($_SESSION['users'][0]['id']);
-/*require_once('../classes/Connection.class.php');
-$dbh = Connection::get();
-$sql = "select login, password, handle from users where id = :id limit 1";
-$sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-$sth->execute(array(
-    ':id' => $data['id']
-));
-$res = $sth->fetchAll();
-print_r($res);*/
+$users = isset($_SESSION['users']) ? $_SESSION['users'] : [];
+
+foreach ($users as $user) {
+    $_SESSION['user_id'] = $user->id;
+    require_once('../classes/Connection.class.php');
+    $dbh = Connection::get();
+    $sql = "select login, handle from users where id = :id limit 1";
+    $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->execute(array(
+        ':id' => $user->id
+    ));
+
+
+    try {
+        $result = $sth->setFetchMode(PDO::FETCH_NUM);
+        while ($row = $sth->fetch()) {
+            $login = $row[0];
+            $handle = $row[1];
+        }
+    }
+    catch (PDOException $e) {
+        print $e->getMessage();
+    }
+}
+
+$_POST['login'] = $login;
+$_POST['handle'] = $handle;
+
 ?>
 
 <html>
@@ -54,7 +72,7 @@ print_r($res);*/
                     <fieldset>
                         <legend>user update</legend>
                         <label for="userLogin">login</label>
-                        <input type="text" id="userLogin" name="login" value="<?php echo !empty($_POST['login']) ? ($_POST['login']) : '' ?>">
+                        <input type="text" id="userLogin" name="login" value="<?php echo $login ?>">
                         <label for="userPassword">password</label>
                         <input type="password" id="userPassword" name="password" value="">
                         <label for="userHandle">handle</label>

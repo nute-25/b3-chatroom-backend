@@ -48,16 +48,20 @@ try {
             header('Location: ../views/users_list.php');
             break;
 
-        /*case 'update':
+        case 'update';
+            if ($user->update($_POST)){
+                $_SESSION['errors'] = [];
+                header('Location: ./users_controller.php?action=list');
+                die;
+            }
+            $_SESSION['errors'] = $user->errors;
             header('Location: ../views/users_modification.php');
-
-            header('Location: ../views/users_list.php');
-            break;*/
+            break;
 
         case 'register';
             if ($user->save($_POST)){
                 $_SESSION['errors'] = [];
-                header('Location: ../views/users_list.php');
+                header('Location: ./users_controller.php?action=list');
                 die;
             }
             $_SESSION['errors'] = $user->errors;

@@ -129,32 +129,7 @@ Class User
         // si les champs rentrés sont valident
         if ($this->validate($data)) {
             if(isset($data['id']) && !empty($data['id'])){
-                // TODO : verifier que le login, si on choisit de le modifier n'est pas deja utilise par un autre user dans la bdd
-
-                // TODO : select from user pour preremplir les champs dans le form dinscription
-                $dbh = Connection::get();
-                $sql = "select login, password, handle from users where id = :id limit 1";
-                $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                $sth->execute(array(
-                    ':id' => $data['id']
-                ));
-                $storedPassword = $sth->fetchColumn();
-                if (password_verify($data['password'], $storedPassword)) {
-                    return true;
-                }
-
                 // update
-                $dbh = Connection::get();
-                // TODO : requete a modifier
-                $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
-                $sql = "update users set login=:login, password=:password, handle=:handle where id=:id limit 1";
-                $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-                $sth->execute(array(
-                    ':login' => $data['login'],
-                    ':password' => $hashedPassword,
-                    ':handle' => $data['handle'],
-                    ':id' => $data['id']
-                ));
             }elseif ($this->loginExists($data['login'])){
                 return false;
             }
@@ -175,6 +150,63 @@ Class User
                 // ERROR
                 // put errors in $session
                 $this->errors['pas reussi a creer le user'];
+            }
+        }
+        return false;
+    }
+
+    // modifier les champs user
+    public function update($data)
+    {
+        // si les champs rentrés sont valident
+        if ($this->validate($data)) {
+            /*if(isset($data['id']) && !empty($data['id'])){
+                // update
+            }elseif ($this->loginExists($data['login'])){
+                return false;
+            }*/
+
+            // update
+            $dbh = Connection::get();
+            // select password of user in bdd
+            $sql = "select password from users where id = :id limit 1";
+            $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $sth->execute(array(
+                ':id' => $_SESSION['user_id']
+            ));
+            $storedPassword = $sth->fetchColumn();
+
+            // hash password saisi par l'utilisateur
+            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+            if ($hashedPassword !== $storedPassword) {
+                $sql = "update users set login=:login, password=:password, handle=:handle where id=:id limit 1";
+                $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                if ($sth->execute(array(
+                    ':login' => $data['login'],
+                    ':password' => $hashedPassword,
+                    ':handle' => $data['handle'],
+                    ':id' => $_SESSION['user_id']
+                ))) {
+                    return true;
+                } else {
+                    // ERROR
+                    // put errors in $session
+                    $this->errors['pas reussi a mettre a jour le user'];
+                }
+            } else {
+                $sql = "update users set login=:login, handle=:handle where id=:id limit 1";
+                $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                if ($sth->execute(array(
+                    ':login' => $data['login'],
+                    ':handle' => $data['handle'],
+                    ':id' => $data['id']
+                ))) {
+                    return true;
+                } else {
+                    // ERROR
+                    // put errors in $session
+                    $this->errors['pas reussi a mettre a jour le user'];
+                }
             }
         }
         return false;
