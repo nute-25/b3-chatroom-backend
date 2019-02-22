@@ -11,7 +11,7 @@ try {
     $message = new Message();
 
     switch ($action){
-        case 'display':
+        case 'list':
             $_SESSION['errors'] = [];
             $messages = $message->findAll();
             $_SESSION['messages'] = $messages;
@@ -20,10 +20,10 @@ try {
 
         case 'delete':
             if ($message->delete($_GET)){
-                header('Location: ../views/messages_list.php');
+                header('Location: ./messages_controller.php?action=list');
                 die;
             }
-            header('Location: ../views/messages_list.php');
+            header('Location: ./messages_controller.php?action=list');
             break;
         default;
             header('Location: ../views/messages_list.php');

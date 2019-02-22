@@ -15,10 +15,11 @@ try {
     switch ($action){
         case 'login':
             if ($user->login($_POST)){
+                $_SESSION['user_login'] = $_POST['login'];
                 $_SESSION['errors'] = [];
                 $users = $user->findAll();
                 $_SESSION['users'] = $users;
-                header('Location: ../views/users_list.php');
+                header('Location: ./users_controller.php?action=list');
                 die;
             }
             // put errors in $session

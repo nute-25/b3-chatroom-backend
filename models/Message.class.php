@@ -23,7 +23,7 @@ class Message
         }
     }
 
-    // retourne messages
+
     public function get($id = null)
     {
         if (!is_null($id)) {
@@ -35,7 +35,7 @@ class Message
                 ':id' => $id
             ));
             // recupere les messages et fout le resultat dans une variable sous forme de tableau de tableaux
-            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Message.class');
+            $stmt->setFetchMode(PDO::FETCH_CLASS, 'Message');
             $message = $stmt->fetch();
 
             $this->id = $message->id;
@@ -43,6 +43,16 @@ class Message
             $this->user_id = $message->user_id;
             $this->chatroom_id = $message->chatroom_id;
         }
+    }
+
+    // retourne messages du user
+    public function findAll()
+    {
+        $dbh = Connection::get();
+        $stmt = $dbh->query("select * from messages where user_id = (select id from users where login = '".$_SESSION['user_login']."')");
+        // recupere les messages et fout le resultat dans une variable sous forme de tableau de tableaux
+        $messages = $stmt->fetchAll(PDO::FETCH_CLASS);
+        return $messages;
     }
 
     // supprime un message de l'user
