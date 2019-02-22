@@ -130,8 +130,20 @@ Class User
         if ($this->validate($data)) {
             if(isset($data['id']) && !empty($data['id'])){
                 // TODO : verifier que le login, si on choisit de le modifier n'est pas deja utilise par un autre user dans la bdd
+
                 // TODO : select from user pour preremplir les champs dans le form dinscription
-                /*// update
+                $dbh = Connection::get();
+                $sql = "select login, password, handle from users where id = :id limit 1";
+                $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $sth->execute(array(
+                    ':id' => $data['id']
+                ));
+                $storedPassword = $sth->fetchColumn();
+                if (password_verify($data['password'], $storedPassword)) {
+                    return true;
+                }
+
+                // update
                 $dbh = Connection::get();
                 // TODO : requete a modifier
                 $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
@@ -142,7 +154,7 @@ Class User
                     ':password' => $hashedPassword,
                     ':handle' => $data['handle'],
                     ':id' => $data['id']
-                ));*/
+                ));
             }elseif ($this->loginExists($data['login'])){
                 return false;
             }

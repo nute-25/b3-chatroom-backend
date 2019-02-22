@@ -47,6 +47,13 @@ try {
             }
             header('Location: ../views/users_list.php');
             break;
+
+        /*case 'update':
+            header('Location: ../views/users_modification.php');
+
+            header('Location: ../views/users_list.php');
+            break;*/
+
         case 'register';
             if ($user->save($_POST)){
                 $_SESSION['errors'] = [];
