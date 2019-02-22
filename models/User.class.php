@@ -179,12 +179,13 @@ Class User
             // hash password saisi par l'utilisateur
             $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
             if ($hashedPassword !== $storedPassword) {
-                $sql = "update users set login=:login, password=:password, handle=:handle where id=:id limit 1";
+                $sql = "update users set login=:login, password=:password, handle=:handle, modified=:modified where id=:id limit 1";
                 $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 if ($sth->execute(array(
                     ':login' => $data['login'],
                     ':password' => $hashedPassword,
                     ':handle' => $data['handle'],
+                    ':modified' => date("Y-m-d H:i:s"),
                     ':id' => $_SESSION['user_id']
                 ))) {
                     return true;

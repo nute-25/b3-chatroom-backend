@@ -33,7 +33,10 @@ $messages = isset($_SESSION['messages']) ? $_SESSION['messages'] : [];
             <tr>
                 <th>content</th>
                 <th>created</th>
+                <th>modified</th>
                 <th>user_id</th>
+                <th>chatroom_id</th>
+                <th>delete</th>
             </tr>
             </thead>
             <tbody>
@@ -43,7 +46,10 @@ $messages = isset($_SESSION['messages']) ? $_SESSION['messages'] : [];
                 <tr>
                     <td><?= $message->content ?></td>
                     <td><?= $message->created ?></td>
+                    <td><?= $message->modified ?></td>
                     <td><?= $message->user_id ?></td>
+                    <td><?= $message->chatroom_id ?></td>
+                    <td><a href="../controllers/messages_controller.php?action=delete&id=<?php echo $message->id; ?>"><button>delete</button></a></td>
                 </tr>
                 <?php
             }
