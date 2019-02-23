@@ -6,6 +6,7 @@ $users = isset($_SESSION['users']) ? $_SESSION['users'] : [];
 
 <html>
 <head>
+    <title>Users List</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://puteborgne.sexy/_css/normalize.css"/>
     <link rel="stylesheet" href="https://puteborgne.sexy/_css/skeleton.css"/>
@@ -52,8 +53,16 @@ $users = isset($_SESSION['users']) ? $_SESSION['users'] : [];
                     <td><?= $user->handle ?></td>
                     <td><?= $user->created ?></td>
                     <td><?= $user->modified ?></td>
-                    <td><a href="../views/users_modification.php"><button>update</button></a></td>
-                    <td><a href="../controllers/users_controller.php?action=delete&id=<?php echo $user->id; ?>"><button>delete</button></a></td>
+                    <td>
+                        <a href="../views/users_modification.php">
+                            <button>update</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="../controllers/users_controller.php?action=delete&id=<?php echo $user->id; ?>">
+                            <button>delete</button>
+                        </a>
+                    </td>
                 </tr>
                 <?php
             }

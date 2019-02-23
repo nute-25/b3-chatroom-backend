@@ -20,7 +20,7 @@ try {
         case 'list':
             $_SESSION['errors'] = [];
             $chatrooms = $chatroom->findAll();
-            $_SESSION['messages'] = $chatrooms;
+            $_SESSION['chatrooms'] = $chatrooms;
             header('Location: ../views/chatrooms_list.php');
             break;
 

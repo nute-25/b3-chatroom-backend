@@ -13,6 +13,7 @@ $chatrooms = isset($_SESSION['chatrooms']) ? $_SESSION['chatrooms'] : [];
 
 <html>
 <head>
+    <title>User's Chatroom</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://puteborgne.sexy/_css/normalize.css"/>
     <link rel="stylesheet" href="https://puteborgne.sexy/_css/skeleton.css"/>
@@ -35,6 +36,9 @@ $chatrooms = isset($_SESSION['chatrooms']) ? $_SESSION['chatrooms'] : [];
 
     <div class="row">
         <h2>Chatrooms</h2>
+        <a href="../views/chatrooms_register.php">
+            <button>register chatroom</button>
+        </a>
         <table class="u-full-width">
             <thead>
             <tr>
@@ -42,6 +46,7 @@ $chatrooms = isset($_SESSION['chatrooms']) ? $_SESSION['chatrooms'] : [];
                 <th>user_id</th>
                 <th>created</th>
                 <th>modified</th>
+                <th>update</th>
             </tr>
             </thead>
             <tbody>
@@ -53,6 +58,11 @@ $chatrooms = isset($_SESSION['chatrooms']) ? $_SESSION['chatrooms'] : [];
                     <td><?= $chatroom->user_id ?></td>
                     <td><?= $chatroom->created ?></td>
                     <td><?= $chatroom->modified ?></td>
+                    <td>
+                        <a href="../views/chatrooms_modification.php?title=<?php echo $chatroom->title; ?>">
+                            <button>update</button>
+                        </a>
+                    </td>
                 </tr>
                 <?php
             }

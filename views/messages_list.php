@@ -6,6 +6,7 @@ $messages = isset($_SESSION['messages']) ? $_SESSION['messages'] : [];
 
 <html>
 <head>
+    <title>User's Messages List</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://puteborgne.sexy/_css/normalize.css"/>
     <link rel="stylesheet" href="https://puteborgne.sexy/_css/skeleton.css"/>
@@ -49,7 +50,11 @@ $messages = isset($_SESSION['messages']) ? $_SESSION['messages'] : [];
                     <td><?= $message->modified ?></td>
                     <td><?= $message->user_id ?></td>
                     <td><?= $message->chatroom_id ?></td>
-                    <td><a href="../controllers/messages_controller.php?action=delete&id=<?php echo $message->id; ?>"><button>delete</button></a></td>
+                    <td>
+                        <a href="../controllers/messages_controller.php?action=delete&id=<?php echo $message->id; ?>">
+                            <button>delete</button>
+                        </a>
+                    </td>
                 </tr>
                 <?php
             }
