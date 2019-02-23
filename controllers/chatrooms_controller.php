@@ -23,6 +23,17 @@ try {
             $_SESSION['messages'] = $chatrooms;
             header('Location: ../views/chatrooms_list.php');
             break;
+
+        case 'register';
+            if ($chatroom->save($_POST)){
+                $_SESSION['errors'] = [];
+                header('Location: ./chatrooms_controller.php?action=list');
+                die;
+            }
+            $_SESSION['errors'] = $user->errors;
+            header('Location: ../views/chatrooms_register.php');
+            break;
+
         default;
             header('Location: ../views/chatrooms_list.php');
             break;

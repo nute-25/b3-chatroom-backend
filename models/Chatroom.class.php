@@ -52,4 +52,58 @@ class Chatroom
         $chatrooms = $stmt->fetchAll(PDO::FETCH_CLASS);
         return $chatrooms;
     }
+
+
+    // verifie les champs saisis par l internaute
+    public function validate($data)
+    {
+        $this->errors = [];
+
+        /* required fields */
+        if (!isset($data['title'])) {
+            $this->errors[] = 'champ title vide';
+        }
+
+        /* tests de formats */
+        if (isset($data['title'])) {
+            if (empty($data['title'])) {
+                $this->errors[] = 'champ title vide';
+                // si title > 50 chars
+            } else if (mb_strlen($data['title']) > 45) {
+                $this->errors[] = 'champ title trop long (45max)';
+            }
+        }
+
+        if (count($this->errors) > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    // enregistrement chatroom d un user
+    public function save($data)
+    {
+        // si les champs rentrés sont valident
+        if ($this->validate($data)) {
+            /* syntaxe avec preparedStatements */
+            $dbh = Connection::get();
+
+            $stmt = $dbh->query("select * from users where login = '".$_SESSION['user_login']."'");
+            $users = $stmt->fetch();
+
+            $sql = "insert into chatrooms (title, user_id) values (:title, :user_id)";
+            $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            if ($sth->execute(array(
+                ':title' => $data['title'],
+                ':user_id' => $users['id']
+            ))) {
+                return true;
+            } else {
+                // ERROR
+                // put errors in $session
+                $this->errors['pas reussi a creer le user'];
+            }
+        }
+        return false;
+    }
 }
