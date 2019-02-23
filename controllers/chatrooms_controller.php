@@ -44,6 +44,13 @@ try {
             header('Location: ../views/chatrooms_modification.php');
             break;
 
+        case 'displayMessages':
+            $_SESSION['errors'] = [];
+            $chatroom_messages = $chatroom->findAllMessages($_GET['title']);
+            $_SESSION['chatroom_messages'] = $chatroom_messages;
+            header('Location: ../views/chatrooms_messages_list.php');
+            break;
+
         default;
             header('Location: ../views/chatrooms_list.php');
             break;

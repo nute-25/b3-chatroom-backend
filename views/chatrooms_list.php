@@ -47,6 +47,7 @@ $chatrooms = isset($_SESSION['chatrooms']) ? $_SESSION['chatrooms'] : [];
                 <th>created</th>
                 <th>modified</th>
                 <th>update</th>
+                <th>messages</th>
             </tr>
             </thead>
             <tbody>
@@ -61,6 +62,11 @@ $chatrooms = isset($_SESSION['chatrooms']) ? $_SESSION['chatrooms'] : [];
                     <td>
                         <a href="../views/chatrooms_modification.php?title=<?php echo $chatroom->title; ?>">
                             <button>update</button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="../controllers/chatrooms_controller.php?action=displayMessages&title=<?php echo $chatroom->title; ?>">
+                            <button>display</button>
                         </a>
                     </td>
                 </tr>
