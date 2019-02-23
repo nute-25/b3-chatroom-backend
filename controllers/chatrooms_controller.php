@@ -30,8 +30,18 @@ try {
                 header('Location: ./chatrooms_controller.php?action=list');
                 die;
             }
-            $_SESSION['errors'] = $user->errors;
+            $_SESSION['errors'] = $chatroom->errors;
             header('Location: ../views/chatrooms_register.php');
+            break;
+
+        case 'update';
+            if ($chatroom->update($_POST)){
+                $_SESSION['errors'] = [];
+                header('Location: ./chatrooms_controller.php?action=list');
+                die;
+            }
+            $_SESSION['errors'] = $chatroom->errors;
+            header('Location: ../views/chatrooms_modification.php');
             break;
 
         default;

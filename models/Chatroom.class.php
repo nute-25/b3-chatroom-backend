@@ -106,4 +106,30 @@ class Chatroom
         }
         return false;
     }
+
+    // modifier une chatroom
+    public function update($data)
+    {
+        // si les champs rentrés sont valident
+        if ($this->validate($data)) {
+            // update
+            $dbh = Connection::get();
+
+            $sql = "update chatrooms set title=:title, modified=:modified where title = '".$_SESSION['chatroom_title']."'";
+            $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            if ($sth->execute(array(
+                ':title' => $data['title'],
+                ':modified' => date("Y-m-d H:i:s")
+            ))) {
+                $_SESSION['chatroom_title'] = $data['title'];
+                return true;
+            } else {
+                // ERROR
+                // put errors in $session
+                $this->errors['pas reussi a mettre a jour la chatroom'];
+            }
+
+        }
+        return false;
+    }
 }
