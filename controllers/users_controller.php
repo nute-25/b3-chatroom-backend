@@ -69,6 +69,16 @@ try {
             header('Location: ../views/users_register.php');
             break;
 
+        case 'test' :
+            $recu = json_decode(file_get_contents('php://input'));
+            /*print_r($recu);
+            die;*/
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($recu);
+            break;
+
         default:
             header('Location: ../views/users_login.php');
             break;
