@@ -246,7 +246,7 @@ Class User
             ':login' => $data->login
         ));
         // recupere l'user et fout le resultat dans une variable sous forme de tableau de tableaux
-        $user = $sth->fetchAll(PDO::FETCH_CLASS);
+        $user = $sth->fetch();
         return $user;
     }
 
