@@ -215,22 +215,23 @@ Class User
 
     public function login($data)
     {
-        if ($this->validate($data)) {
+//        if ($this->validate($data)) {
             $dbh = Connection::get();
             $sql = "select password from users where login = :login limit 1";
             $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $sth->execute(array(
-                ':login' => $data['login']
+                /*':login' => $data['login']*/
+                ':login' => $data->login
             ));
             $storedPassword = $sth->fetchColumn();
-            if (password_verify($data['password'], $storedPassword)) {
+            if (password_verify(/*$data['password']*/$data->password, $storedPassword)) {
                 return true;
 
             } else {
                 // ERROR
                 $this->errors[] = 'connexion impossible';
             }
-        }
+        //}
         return false;
     }
 

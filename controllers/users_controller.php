@@ -14,17 +14,30 @@ try {
 
     switch ($action){
         case 'login':
-            if ($user->login($_POST)){
-                $_SESSION['user_login'] = $_POST['login'];
+            //récupération du JSON envoyé par VUE.js
+            $json_recu = json_decode(file_get_contents('php://input'));
+
+            //return true ou false si on est login
+            /*$check = $user->login($_POST);*/
+            $check = $user->login($json_recu);
+            //si true
+            if ($check) {
                 $_SESSION['errors'] = [];
+                /*$_SESSION['user_login'] = $_POST['login'];
                 $users = $user->findAll();
                 $_SESSION['users'] = $users;
                 header('Location: ./users_controller.php?action=list');
-                die;
+                die;*/
             }
-            // put errors in $session
+            /*// put errors in $session
             $_SESSION['errors'] = $user->errors;
-            header('Location: ../views/users_login.php');
+            header('Location: ../views/users_login.php');*/
+
+            //Preparing headers to answer VUE
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($check);
             break;
 
         case 'list':
