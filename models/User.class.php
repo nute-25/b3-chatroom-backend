@@ -114,6 +114,7 @@ Class User
 
     }
 
+    // recupere l'ensemble des utilisateurs existants dans la bdd
     public function findAll()
     {
         $dbh = Connection::get();
@@ -233,6 +234,20 @@ Class User
             }
         }
         return false;
+    }
+
+    // recupere les données de l'utilisateur ayant réussi à se connecter
+    public function retrieveUser($data)
+    {
+        $dbh = Connection::get();
+        $sql = "select * from users where login = :login limit 1";
+        $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(
+            ':login' => $data->login
+        ));
+        // recupere l'user et fout le resultat dans une variable sous forme de tableau de tableaux
+        $user = $sth->fetchAll(PDO::FETCH_CLASS);
+        return $user;
     }
 
     public function delete($data){

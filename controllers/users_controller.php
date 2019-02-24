@@ -23,6 +23,7 @@ try {
             //si true
             if ($check) {
                 $_SESSION['errors'] = [];
+                $check = $user->retrieveUser($json_collected);
                 /*$_SESSION['user_login'] = $_POST['login'];
                 $users = $user->findAll();
                 $_SESSION['users'] = $users;
