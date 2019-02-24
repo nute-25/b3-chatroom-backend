@@ -15,11 +15,11 @@ try {
     switch ($action){
         case 'login':
             //récupération du JSON envoyé par VUE.js
-            $json_recu = json_decode(file_get_contents('php://input'));
+            $json_collected = json_decode(file_get_contents('php://input'));
 
             //return true ou false si on est login
             /*$check = $user->login($_POST);*/
-            $check = $user->login($json_recu);
+            $check = $user->login($json_collected);
             //si true
             if ($check) {
                 $_SESSION['errors'] = [];
@@ -29,9 +29,13 @@ try {
                 header('Location: ./users_controller.php?action=list');
                 die;*/
             }
-            /*// put errors in $session
-            $_SESSION['errors'] = $user->errors;
-            header('Location: ../views/users_login.php');*/
+            else {
+                // put errors in $session
+                $_SESSION['errors'] = $user->errors;
+                // replace value false by errors
+                $check = $_SESSION['errors'];
+            }
+            /*header('Location: ../views/users_login.php');*/
 
             //Preparing headers to answer VUE
             header("Access-Control-Allow-Origin: *");

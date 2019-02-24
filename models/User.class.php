@@ -48,40 +48,40 @@ Class User
         $this->errors = [];
 
         /* required fields */
-        if (!isset($data['login'])) {
+        if (!isset(/*$data['login']*/$data->login)) {
             $this->errors[] = 'champ login vide';
         }
-        if (!isset($data['password'])) {
+        if (!isset(/*$data['password']*/$data->password)) {
             $this->errors[] = 'champ password vide';
         }
         /* tests de formats */
-        if (isset($data['login'])) {
-            if (empty($data['login'])) {
+        if (isset(/*$data['login']*/$data->login)) {
+            if (empty(/*$data['login']*/$data->login)) {
                 $this->errors[] = 'champ login vide';
                 // si name > 50 chars
-            } else if (mb_strlen($data['login']) > 45) {
+            } else if (mb_strlen(/*$data['login']*/$data->login) > 45) {
                 $this->errors[] = 'champ login trop long (45max)';
             }
         }
 
-        if (isset($data['password'])) {
-            if (empty($data['password'])) {
+        if (isset(/*$data['password']*/$data->password)) {
+            if (empty(/*$data['password']*/$data->password)) {
                 $this->errors[] = 'champ password vide';
                 // si password < 8 chars
-            } else if (mb_strlen($data['password']) < 8) {
+            } else if (mb_strlen(/*$data['password']*/$data->password) < 8) {
                 $this->errors[] = 'champ password trop court (8 min)';
-            } else if (mb_strlen($data['password']) > 20) {
+            } else if (mb_strlen(/*$data['password']*/$data->password) > 20) {
                 $this->errors[] = 'champ password trop long (20 max)';
             }
         }
 
-        if (isset($data['handle'])) {
-            if (empty($data['handle'])) {
+        if (isset(/*$data['handle']*/$data->handle)) {
+            if (empty(/*$data['handle']*/$data->handle)) {
                 $this->errors[] = 'champ handle vide';
                 // si handle < 6 chars
-            } else if (mb_strlen($data['handle']) < 6) {
+            } else if (mb_strlen(/*$data['handle']*/$data->handle) < 6) {
                 $this->errors[] = 'champ handle trop court (6 min)';
-            } else if (mb_strlen($data['handle']) > 45) {
+            } else if (mb_strlen(/*$data['handle']*/$data->handle) > 45) {
                 $this->errors[] = 'champ handle trop long (20 max)';
             }
         }
@@ -215,7 +215,7 @@ Class User
 
     public function login($data)
     {
-//        if ($this->validate($data)) {
+        if ($this->validate($data)) {
             $dbh = Connection::get();
             $sql = "select password from users where login = :login limit 1";
             $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
@@ -231,7 +231,7 @@ Class User
                 // ERROR
                 $this->errors[] = 'connexion impossible';
             }
-        //}
+        }
         return false;
     }
 
