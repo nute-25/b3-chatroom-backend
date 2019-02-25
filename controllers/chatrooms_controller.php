@@ -18,10 +18,19 @@ try {
 
     switch ($action){
         case 'list':
+            //récupération du JSON envoyé par VUE.js
+            $json_collected = json_decode(file_get_contents('php://input'));
+
             $_SESSION['errors'] = [];
-            $chatrooms = $chatroom->findAll();
-            $_SESSION['chatrooms'] = $chatrooms;
-            header('Location: ../views/chatrooms_list.php');
+            $chatrooms = $chatroom->findAll($json_collected);
+            /*$_SESSION['chatrooms'] = $chatrooms;
+            header('Location: ../views/chatrooms_list.php');*/
+
+            //Preparing headers to answer VUE
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($chatrooms);
             break;
 
         case 'register';
