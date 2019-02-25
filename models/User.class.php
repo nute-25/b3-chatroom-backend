@@ -49,40 +49,40 @@ Class User
 
         /* required fields */
         if (!isset(/*$data['login']*/$data->login)) {
-            $this->errors[] = 'champ login vide';
+            $this->errors[] = 'Empty login field';
         }
         if (!isset(/*$data['password']*/$data->password)) {
-            $this->errors[] = 'champ password vide';
+            $this->errors[] = 'Empty password field';
         }
         /* tests de formats */
         if (isset(/*$data['login']*/$data->login)) {
             if (empty(/*$data['login']*/$data->login)) {
-                $this->errors[] = 'champ login vide';
+                $this->errors[] = 'Empty login field';
                 // si name > 50 chars
             } else if (mb_strlen(/*$data['login']*/$data->login) > 45) {
-                $this->errors[] = 'champ login trop long (45max)';
+                $this->errors[] = 'Login field is too long (45max)';
             }
         }
 
         if (isset(/*$data['password']*/$data->password)) {
             if (empty(/*$data['password']*/$data->password)) {
-                $this->errors[] = 'champ password vide';
+                $this->errors[] = 'Empty password field';
                 // si password < 8 chars
             } else if (mb_strlen(/*$data['password']*/$data->password) < 8) {
-                $this->errors[] = 'champ password trop court (8 min)';
+                $this->errors[] = 'Password field is too short (8 min)';
             } else if (mb_strlen(/*$data['password']*/$data->password) > 20) {
-                $this->errors[] = 'champ password trop long (20 max)';
+                $this->errors[] = 'Password field is too long (20 max)';
             }
         }
 
         if (isset(/*$data['handle']*/$data->handle)) {
             if (empty(/*$data['handle']*/$data->handle)) {
-                $this->errors[] = 'champ handle vide';
+                $this->errors[] = 'Empty handle field';
                 // si handle < 6 chars
             } else if (mb_strlen(/*$data['handle']*/$data->handle) < 6) {
-                $this->errors[] = 'champ handle trop court (6 min)';
+                $this->errors[] = 'Handle field is too short (6 min)';
             } else if (mb_strlen(/*$data['handle']*/$data->handle) > 45) {
-                $this->errors[] = 'champ handle trop long (20 max)';
+                $this->errors[] = 'Handle field is too long (20 max)';
             }
         }
 
@@ -230,7 +230,7 @@ Class User
 
             } else {
                 // ERROR
-                $this->errors[] = 'connexion impossible';
+                $this->errors[] = 'Cannot connect';
             }
         }
         return false;

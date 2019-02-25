@@ -60,17 +60,17 @@ class Chatroom
         $this->errors = [];
 
         /* required fields */
-        if (!isset($data['title'])) {
-            $this->errors[] = 'champ title vide';
+        if (!isset(/*$data['title']*/$data->title)) {
+            $this->errors[] = 'Empty title field';
         }
 
         /* tests de formats */
-        if (isset($data['title'])) {
-            if (empty($data['title'])) {
-                $this->errors[] = 'champ title vide';
+        if (isset(/*$data['title']*/$data->title)) {
+            if (empty(/*$data['title']*/$data->title)) {
+                $this->errors[] = 'Empty title field';
                 // si title > 50 chars
-            } else if (mb_strlen($data['title']) > 45) {
-                $this->errors[] = 'champ title trop long (45max)';
+            } else if (mb_strlen(/*$data['title']*/$data->title) > 45) {
+                $this->errors[] = 'Title field is too long (45max)';
             }
         }
 
@@ -88,20 +88,21 @@ class Chatroom
             /* syntaxe avec preparedStatements */
             $dbh = Connection::get();
 
-            $stmt = $dbh->query("select * from users where login = '".$_SESSION['user_login']."'");
-            $users = $stmt->fetch();
+            /*$stmt = $dbh->query("select * from users where login = '".$_SESSION['user_login']."'");
+            $users = $stmt->fetch();*/
 
             $sql = "insert into chatrooms (title, user_id) values (:title, :user_id)";
             $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             if ($sth->execute(array(
-                ':title' => $data['title'],
-                ':user_id' => $users['id']
+                /*':title' => $data['title'],
+                ':user_id' => $users['id']*/
+                ':title' => $data->title,
+                ':user_id' => $data->user_id
             ))) {
                 return true;
             } else {
                 // ERROR
-                // put errors in $session
-                $this->errors['pas reussi a creer le user'];
+                $this->errors['Impossible to create chatroom'];
             }
         }
         return false;

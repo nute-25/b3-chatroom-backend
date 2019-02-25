@@ -25,13 +25,31 @@ try {
             break;
 
         case 'register';
-            if ($chatroom->save($_POST)){
+            //récupération du JSON envoyé par VUE.js
+            $json_collected = json_decode(file_get_contents('php://input'));
+
+            //return true ou false si la chatroom a été enregistré
+            /*$check = $chatroom->save($_POST);*/
+            $check = $chatroom->save($json_collected);
+            //si true
+            if ($check){
                 $_SESSION['errors'] = [];
-                header('Location: ./chatrooms_controller.php?action=list');
-                die;
+                /*header('Location: ./chatrooms_controller.php?action=list');
+                die;*/
             }
-            $_SESSION['errors'] = $chatroom->errors;
-            header('Location: ../views/chatrooms_register.php');
+            else {
+                // put errors in $session
+                $_SESSION['errors'] = $chatroom->errors;
+                // replace value false by errors
+                $check = $_SESSION['errors'];
+            }
+            /*header('Location: ../views/chatrooms_register.php');*/
+
+            //Preparing headers to answer VUE
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($check);
             break;
 
         case 'update';
