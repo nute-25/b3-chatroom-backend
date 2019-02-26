@@ -56,6 +56,25 @@ class Message
         return $messages;
     }
 
+    public function save($data)
+    {
+        $dbh = Connection::get();
+
+        $sql = "insert into messages (content, user_id, chatroom_id) values (:content, :user_id, :chatroom_id)";
+        $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        if ($sth->execute(array(
+            ':content' => $data->content,
+            ':user_id' => $data->user_id,
+            ':chatroom_id' =>$data->chatroom_id
+        ))) {
+            return true;
+        } else {
+            // ERROR
+            $this->errors['Impossible to add message'];
+        }
+        return false;
+    }
+
     // supprime un message de l'user
     public function delete($data) {
         $dbh = Connection::get();
