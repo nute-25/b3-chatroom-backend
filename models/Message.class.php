@@ -46,10 +46,11 @@ class Message
     }
 
     // retourne messages du user
-    public function findAll()
+    public function findAll($data)
     {
         $dbh = Connection::get();
-        $stmt = $dbh->query("select * from messages where user_id = (select id from users where login = '".$_SESSION['user_login']."')");
+        /*$stmt = $dbh->query("select * from messages where user_id = (select id from users where login = '".$_SESSION['user_login']."')");*/
+        $stmt = $dbh->query("select * from messages where user_id = '".$data->user_id."'");
         // recupere les messages et fout le resultat dans une variable sous forme de tableau de tableaux
         $messages = $stmt->fetchAll(PDO::FETCH_CLASS);
         return $messages;

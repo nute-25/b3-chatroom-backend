@@ -12,10 +12,19 @@ try {
 
     switch ($action){
         case 'list':
+            //récupération du JSON envoyé par VUE.js
+            $json_collected = json_decode(file_get_contents('php://input'));
+
             $_SESSION['errors'] = [];
-            $messages = $message->findAll();
-            $_SESSION['messages'] = $messages;
-            header('Location: ../views/messages_list.php');
+            $messages = $message->findAll($json_collected);
+            /*$_SESSION['messages'] = $messages;
+            header('Location: ../views/messages_list.php');*/
+
+            //Preparing headers to answer VUE
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($messages);
             break;
 
         case 'delete':
