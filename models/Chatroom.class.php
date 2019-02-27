@@ -139,9 +139,10 @@ class Chatroom
     public function findAllMessages($data)
     {
         $dbh = Connection::get();
-        $req_user = "(select id from users where login = '".$_SESSION['user_login']."')";
+        /*$req_user = "(select id from users where login = '".$_SESSION['user_login']."')";
         $req_chatroom = "(select id from chatrooms where title = '".$data."')";
-        $stmt = $dbh->query("select * from messages where user_id = $req_user and chatroom_id = $req_chatroom");
+        $stmt = $dbh->query("select * from messages where user_id = $req_user and chatroom_id = $req_chatroom");*/
+        $stmt = $dbh->query("select * from messages where user_id ='".$data->user_id."' and chatroom_id ='".$data->chatroom_id."'");
         // recupere les messages et fout le resultat dans une variable sous forme de tableau de tableaux
         $chatroom_messages = $stmt->fetchAll(PDO::FETCH_CLASS);
         return $chatroom_messages;

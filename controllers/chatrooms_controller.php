@@ -72,10 +72,20 @@ try {
             break;
 
         case 'displayMessages':
+            //récupération du JSON envoyé par VUE.js
+            $json_collected = json_decode(file_get_contents('php://input'));
+
             $_SESSION['errors'] = [];
-            $chatroom_messages = $chatroom->findAllMessages($_GET['title']);
-            $_SESSION['chatroom_messages'] = $chatroom_messages;
-            header('Location: ../views/chatrooms_messages_list.php');
+            $chatroom_messages = $chatroom->findAllMessages(/*$_GET['title']*/$json_collected);
+
+            /*$_SESSION['chatroom_messages'] = $chatroom_messages;
+            header('Location: ../views/chatrooms_messages_list.php');*/
+
+            //Preparing headers to answer VUE
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($chatroom_messages);
             break;
 
         default;

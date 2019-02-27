@@ -76,12 +76,13 @@ class Message
     }
 
     // supprime un message de l'user
-    public function delete($data) {
+    public function delete(/*$data*/$msg_id) {
         $dbh = Connection::get();
         $sql = "delete from messages where id = :id limit 1";
         $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         if($sth->execute(array(
-            ':id' => $data['id']
+            /*':id' => $data['id']*/
+            ':id' => $msg_id
         ))) {
             return true;
         } else {
