@@ -117,18 +117,19 @@ class Chatroom
             // update
             $dbh = Connection::get();
 
-            $sql = "update chatrooms set title=:title, modified=:modified where title = '".$_SESSION['chatroom_title']."'";
+            $sql = "update chatrooms set title=:title, modified=:modified where title = '"./*$_SESSION['chatroom_title']*/$data->last_title."'";
             $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             if ($sth->execute(array(
-                ':title' => $data['title'],
+                /*':title' => $data['title'],*/
+                ':title' => $data->title,
                 ':modified' => date("Y-m-d H:i:s")
             ))) {
-                $_SESSION['chatroom_title'] = $data['title'];
+                /*$_SESSION['chatroom_title'] = $data['title'];*/
                 return true;
             } else {
                 // ERROR
                 // put errors in $session
-                $this->errors['pas reussi a mettre a jour la chatroom'];
+                $this->errors['Fail to update chatroom'];
             }
 
         }

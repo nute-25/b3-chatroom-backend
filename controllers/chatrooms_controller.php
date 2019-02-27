@@ -62,13 +62,26 @@ try {
             break;
 
         case 'update';
-            if ($chatroom->update($_POST)){
+            //récupération du JSON envoyé par VUE.js
+            $json_collected = json_decode(file_get_contents('php://input'));
+
+            $check = $chatroom->update(/*$_POST*/$json_collected);
+            if ($check){
                 $_SESSION['errors'] = [];
-                header('Location: ./chatrooms_controller.php?action=list');
-                die;
+                /*header('Location: ./chatrooms_controller.php?action=list');
+                die;*/
             }
-            $_SESSION['errors'] = $chatroom->errors;
-            header('Location: ../views/chatrooms_modification.php');
+            else {
+                $_SESSION['errors'] = $chatroom->errors;
+                /*header('Location: ../views/chatrooms_modification.php');*/
+                $check = $_SESSION['errors'];
+            }
+
+            //Preparing headers to answer VUE
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($check);
             break;
 
         case 'displayMessages':
