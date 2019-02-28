@@ -68,13 +68,26 @@ try {
             break;
 
         case 'update';
-            if ($user->update($_POST)){
+            //récupération du JSON envoyé par VUE.js
+            $json_collected = json_decode(file_get_contents('php://input'));
+
+            $check = $user->update(/*$_POST*/$json_collected);
+            if ($check){
                 $_SESSION['errors'] = [];
-                header('Location: ./users_controller.php?action=list');
-                die;
+                /*header('Location: ./users_controller.php?action=list');
+                die;*/
             }
-            $_SESSION['errors'] = $user->errors;
-            header('Location: ../views/users_modification.php');
+            else {
+                $_SESSION['errors'] = $user->errors;
+                /*header('Location: ../views/users_modification.php');*/
+                $check = $_SESSION['errors'];
+            }
+
+            //Preparing headers to answer VUE
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+            header('Content-type: application/json; charset=UTF-8');
+            echo json_encode($check);
             break;
 
         case 'register';
@@ -85,16 +98,6 @@ try {
             }
             $_SESSION['errors'] = $user->errors;
             header('Location: ../views/users_register.php');
-            break;
-
-        case 'test' :
-            $recu = json_decode(file_get_contents('php://input'));
-            /*print_r($recu);
-            die;*/
-            header("Access-Control-Allow-Origin: *");
-            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-            header('Content-type: application/json; charset=UTF-8');
-            echo json_encode($recu);
             break;
 
         default:

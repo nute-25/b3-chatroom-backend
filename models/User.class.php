@@ -173,41 +173,48 @@ Class User
             $sql = "select password from users where id = :id limit 1";
             $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
             $sth->execute(array(
-                ':id' => $_SESSION['user_id']
+                /*':id' => $_SESSION['user_id']*/
+                ':id' => $data->user_id
             ));
             $storedPassword = $sth->fetchColumn();
 
             // hash password saisi par l'utilisateur
-            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+            $hashedPassword = password_hash(/*$data['password']*/$data->password, PASSWORD_DEFAULT);
             if ($hashedPassword !== $storedPassword) {
                 $sql = "update users set login=:login, password=:password, handle=:handle, modified=:modified where id=:id limit 1";
                 $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 if ($sth->execute(array(
-                    ':login' => $data['login'],
+                    /*':login' => $data['login'],*/
+                    ':login' => $data->login,
                     ':password' => $hashedPassword,
-                    ':handle' => $data['handle'],
+                    /*':handle' => $data['handle'],*/
+                    ':handle' => $data->handle,
                     ':modified' => date("Y-m-d H:i:s"),
-                    ':id' => $_SESSION['user_id']
+                    /*':id' => $_SESSION['user_id']*/
+                    ':id' => $data->user_id
                 ))) {
                     return true;
                 } else {
                     // ERROR
                     // put errors in $session
-                    $this->errors['pas reussi a mettre a jour le user'];
+                    $this->errors['Fail to update user'];
                 }
             } else {
                 $sql = "update users set login=:login, handle=:handle where id=:id limit 1";
                 $sth = $dbh->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
                 if ($sth->execute(array(
-                    ':login' => $data['login'],
-                    ':handle' => $data['handle'],
-                    ':id' => $data['id']
+                    /*':login' => $data['login'],*/
+                    ':login' => $data->login,
+                    /*':handle' => $data['handle'],*/
+                    ':handle' => $data->handle,
+                    /*':id' => $_SESSION['user_id']*/
+                    ':id' => $data->user_id
                 ))) {
                     return true;
                 } else {
                     // ERROR
                     // put errors in $session
-                    $this->errors['pas reussi a mettre a jour le user'];
+                    $this->errors['Fail to update user'];
                 }
             }
         }
